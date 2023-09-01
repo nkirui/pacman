@@ -13,8 +13,8 @@ spec:
       valueFiles:
         - prod.yaml
   destination:
-    name: prod
-    namespace: default
+    name: in-cluster
+    namespace: prod
   syncPolicy:
     syncOptions:
       - ApplyOutOfSyncOnly=true

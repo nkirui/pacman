@@ -2,7 +2,7 @@ env:
   HTTP_ADDR: :8080
  
 image:
-  name: you/pacman
+  name: nkirui2030/pacman
   tag: ""
   pull: IfNotPresent
  
