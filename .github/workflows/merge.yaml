@@ -1,0 +1,71 @@
+# Trigger the workflow only when:
+# - an existing pull request with any name/type is merged to the master or develop branch
+# - a commit is directly pushed to the master or develop branch
+ 
+name: Merge
+ 
+on:
+  push:
+    branches:
+      - master
+      - develop
+ 
+jobs:
+ 
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      ver: ${{ steps.vars.outputs.ver }}
+    steps:
+      - name: Use repository
+        uses: actions/checkout@v2
+      - name: Build variables
+        id: vars
+        run: |
+          echo "::set-output name=ver::$(git rev-parse --short "$GITHUB_SHA")"
+      - name: Upload repository
+        uses: actions/upload-artifact@v2
+        with:
+          name: repository
+          path: |
+            ${{ github.workspace }}/.infra/docker
+            ${{ github.workspace }}/.dockerignore
+            ${{ github.workspace }}/main.go
+            ${{ github.workspace }}/main_test.go
+            ${{ github.workspace }}/go.mod
+            ${{ github.workspace }}/go.sum
+ 
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Golang 1.17
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+      - name: Download repository
+        uses: actions/download-artifact@v2
+        with:
+          name: repository
+      - name: Run tests
+        run: go test -v -race -timeout=180s -count=1 -cover ./...
+ 
+  docker:
+    needs: [setup, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download repository
+        uses: actions/download-artifact@v2
+        with:
+          name: repository
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          file: .infra/docker/Dockerfile
+          tags: ${{ github.repository }}:latest
