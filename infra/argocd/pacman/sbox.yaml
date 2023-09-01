@@ -13,8 +13,8 @@ spec:
       valueFiles:
         - sbox.yaml
   destination:
-    name: sbox
-    namespace: default
+    name: in-cluster
+    namespace: sbox
   syncPolicy:
     syncOptions:
       - ApplyOutOfSyncOnly=true
