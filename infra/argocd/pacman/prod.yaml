@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pacman-prod
+ 
+spec:
+  project: pacman
+  source:
+    repoURL: https://github.com/Nkirui/action-pacman.git
+    path: infra/helm/pacman
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - prod.yaml
+  destination:
+    name: prod
+    namespace: default
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      - CreateNamespace=true

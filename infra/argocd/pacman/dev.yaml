@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pacman-dev
+ 
+spec:
+  project: pacman
+  source:
+    repoURL: https://github.com/Nkirui/action-pacman.git
+    path: infra/helm/pacman
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - dev.yaml
+  destination:
+    name: in-cluster
+    namespace: dev
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true

@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: pacman
+ 
+spec:
+  destinations:
+    - name: '*'
+      namespace: '*'
+      server: '*'
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  orphanedResources:
+    warn: true
+  sourceRepos:
+    - https://github.com/Nkirui/action-pacman.git
