@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pacman-sbox
+ 
+spec:
+  project: pacman
+  source:
+    repoURL: https://github.com/Nkirui/action-pacman.git
+    path: infra/helm/pacman
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - sbox.yaml
+  destination:
+    name: sbox
+    namespace: default
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
