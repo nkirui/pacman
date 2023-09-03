@@ -32,10 +32,10 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Use Golang 1.17
+      - name: Use Golang 1.21.0
         uses: actions/setup-go@v2
         with:
-          go-version: 1.17
+          go-version: 1.21.0
       - name: Download repository
         uses: actions/download-artifact@v2
         with:
