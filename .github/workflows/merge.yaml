@@ -68,4 +68,4 @@ jobs:
         with:
           push: true
           file: .infra/docker/Dockerfile
-          tags: ${{ github.repository }}:latest
+          tags: ${{ github.repository | lower }}:latest
