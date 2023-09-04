@@ -39,10 +39,10 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Use Golang 1.17
+      - name: Use Golang 1.21.0
         uses: actions/setup-go@v2
         with:
-          go-version: 1.17
+          go-version: 1.21.0
       - name: Download repository
         uses: actions/download-artifact@v2
         with:
@@ -63,9 +63,20 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set Repository Name
+        id: set_repo_name
+        run: |
+          echo "::set-output name=repo_name::$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')"
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
       - name: Build and push image
         uses: docker/build-push-action@v2
         with:
           push: true
           file: .infra/docker/Dockerfile
-          tags: ${{ github.repository }}:latest
+          tags: ${{ steps.set_repo_name.outputs.repo_name }}:latest
+
+
+
+

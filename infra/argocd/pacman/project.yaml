@@ -14,4 +14,4 @@ spec:
   orphanedResources:
     warn: true
   sourceRepos:
-    - https://github.com/Nkirui/action-pacman.git
+    - https://github.com/nkirui/action-pacman.git
