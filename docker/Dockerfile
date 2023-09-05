@@ -1,4 +1,5 @@
-FROM 1.21.0-alpine3.18 as build
+FROM golang:1.21.0-alpine3.18 as build
+
 WORKDIR /source
 COPY . .
 ARG VER

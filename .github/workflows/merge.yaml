@@ -7,7 +7,7 @@ name: Merge
 on:
   push:
     branches:
-      - master
+      - main
       - develop
  
 jobs:
@@ -68,7 +68,7 @@ jobs:
         with:
           push: true
           file: docker/Dockerfile
-          tags: ${{ github.repository }}:latest
+          tags: "nkirui2030/pacman:latest"
           build-args: VER=${{ needs.setup.outputs.ver }}
  
   config:
@@ -78,8 +78,8 @@ jobs:
       - name: Use config repository
         uses: actions/checkout@v2
         with:
-          repository: ${{ github.repository_owner }}/config
-          ref: master
+          repository: ${{ github.repository }}
+          ref: main
           token: ${{ secrets.ACTIONS_TOKEN }}
       - name: Push commit hash to config repository
         run: |
