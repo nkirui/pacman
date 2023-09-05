@@ -7,7 +7,7 @@ name: Merge
 on:
   push:
     branches:
-      - master
+      - main
       - develop
  
 jobs:
@@ -78,8 +78,8 @@ jobs:
       - name: Use config repository
         uses: actions/checkout@v2
         with:
-          repository: ${{ github.repository_owner }}/config
-          ref: master
+          repository: ${{ github.repository_owner }}
+          ref: main
           token: ${{ secrets.ACTIONS_TOKEN }}
       - name: Push commit hash to config repository
         run: |
