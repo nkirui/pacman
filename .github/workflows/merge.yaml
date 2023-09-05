@@ -28,7 +28,7 @@ jobs:
         with:
           name: repository
           path: |
-            ${{ github.workspace }}/.infra/docker
+            ${{ github.workspace }}/docker
             ${{ github.workspace }}/.dockerignore
             ${{ github.workspace }}/main.go
             ${{ github.workspace }}/main_test.go
@@ -63,20 +63,28 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Set Repository Name
-        id: set_repo_name
-        run: |
-          echo "::set-output name=repo_name::$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')"
-        env:
-          GITHUB_REPOSITORY: ${{ github.repository }}
-
       - name: Build and push image
         uses: docker/build-push-action@v2
         with:
           push: true
-          file: .infra/docker/Dockerfile
-          tags: ${{ steps.set_repo_name.outputs.repo_name }}:latest
-
-
-
-
+          file: docker/Dockerfile
+          tags: ${{ github.repository }}:latest
+          build-args: VER=${{ needs.setup.outputs.ver }}
+ 
+  config:
+    needs: [setup, docker]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use config repository
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ github.repository_owner }}/config
+          ref: master
+          token: ${{ secrets.ACTIONS_TOKEN }}
+      - name: Push commit hash to config repository
+        run: |
+          echo ${{ needs.setup.outputs.ver }} > infra/helm/pacman/crds/vcs/hash
+          git config user.name $(git log -n 1 --pretty=format:%an)
+          git config user.email $(git log -n 1 --pretty=format:%ae)
+          git commit infra/helm/pacman/crds/vcs/hash -m "pacman ${{ needs.setup.outputs.ver }}"
+          git push origin HEAD

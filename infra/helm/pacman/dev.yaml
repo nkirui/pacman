@@ -2,7 +2,7 @@ env:
   HTTP_ADDR: :8080
  
 image:
-  name: nkirui2030/pacman
+  name: nkirui/pacman
   tag: latest
   pull: Always
  
