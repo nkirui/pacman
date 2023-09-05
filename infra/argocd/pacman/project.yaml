@@ -6,7 +6,7 @@ metadata:
 spec:
   destinations:
     - name: '*'
-      namespace: '*'
+      namespace: 'go-pacman'
       server: '*'
   clusterResourceWhitelist:
     - group: '*'
