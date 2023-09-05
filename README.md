@@ -1,6 +1,13 @@
-# action-pacman
+# PACMAN PROJECT
 
+## DESCRIPTION
 
-## test1 - push to the master
-## test2 - push to dockerhub with creds
-## test 3
+- This project is a demo for CI/CD workflow
+
+## STACK REQUIREMENTS
+
+- Golang
+- K8s
+- Argocd
+- git
+- dockerhub
