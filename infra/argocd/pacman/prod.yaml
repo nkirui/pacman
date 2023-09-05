@@ -6,7 +6,7 @@ metadata:
 spec:
   project: pacman
   source:
-    repoURL: https://github.com/nkirui/action-pacman.git
+    repoURL: https://github.com/nkirui/pacman.git
     path: infra/helm/pacman
     targetRevision: HEAD
     helm:
