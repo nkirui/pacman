@@ -68,7 +68,7 @@ jobs:
         with:
           push: true
           file: docker/Dockerfile
-          tags: "nkirui/pacman:latest"
+          tags: "nkirui2030/pacman:latest"
           build-args: VER=${{ needs.setup.outputs.ver }}
  
   config:
