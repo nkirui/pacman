@@ -11,3 +11,23 @@
 - Argocd
 - git
 - dockerhub
+
+## STEPS
+
+### 1
+
+- Add github repo to argo to create a  project level
+
+```
+argocd repo add https://github.com/nkirui/pacman \
+    --type git \
+    --name pacman \
+    --project pacman \
+    --username nkirui \
+    --password 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
+
+```
+
+### 2
+
+
