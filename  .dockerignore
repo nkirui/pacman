@@ -7,3 +7,4 @@ pacman
 docker/
 .git/
 .idea/
+.env
