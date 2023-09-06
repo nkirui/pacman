@@ -4,10 +4,17 @@ metadata:
   name: pacman
  
 spec:
-  destinations:
-    - name: '*'
-      namespace: '*'
-      server: '*'
+  destinations:   
+    - namespace: gopacman
+      name: in-cluster
+    - namespace: prod    
+      name: in-cluster
+    - namespace: dev   
+      name: in-cluster 
+    - namespace: sbox
+      name: in-cluster
+
+
   clusterResourceWhitelist:
     - group: '*'
       kind: '*'

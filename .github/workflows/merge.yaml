@@ -80,7 +80,7 @@ jobs:
         with:
           repository: ${{ github.repository }}
           ref: main
-          token: ${{ secrets.ACTIONS_TOKEN }}
+          token: ${{ secrets.ACTIONS_GOLANG }}
       - name: Push commit hash to config repository
         run: |
           echo ${{ needs.setup.outputs.ver }} > infra/helm/pacman/crds/vcs/hash
