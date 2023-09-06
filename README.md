@@ -24,7 +24,7 @@ argocd repo add https://github.com/nkirui/pacman \
     --name pacman \
     --project pacman \
     --username nkirui \
-    --password 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
+    --password gh**********
 
 ```
 
