@@ -2,9 +2,9 @@
 name:  Production Build/Deploy
  
 on:
-  push:
-    branches:
-      - main
+  release:
+    types:
+      - released
  
 jobs: 
   setup:

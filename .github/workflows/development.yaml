@@ -5,6 +5,10 @@ on:
   push:
     branches:
       - develop
+    tags-ignore:
+      # Ignore all tags as we do not want
+      # to trigger this workflow by a release.
+      - "**"
  
 jobs: 
   setup:
