@@ -64,9 +64,9 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          file: docker/Dockerfile
-          tags: "nkirui2030/pacman:latest"
-          build-args: VER=${{ needs.setup.outputs.ver }}
+          file: docker/Dockerfile      
+          tags: ${{ github.repository }}:${{ github.event.release.tag_name }}
+          build-args: VER=${{ github.event.release.tag_name }}
  
   config:
     needs: [setup, docker]
