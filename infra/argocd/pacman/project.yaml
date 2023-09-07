@@ -5,8 +5,8 @@ metadata:
  
 spec:
   destinations:   
-    - namespace: gopacman
-      name: in-cluster
+    - namespace: gopacman    
+      name: in-cluster  
     - namespace: prod    
       name: in-cluster
     - namespace: dev   
