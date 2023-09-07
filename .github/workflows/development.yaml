@@ -4,8 +4,7 @@ name:  Development Build/Deploy
 on:
   push:
     branches:
-      - develop
-   
+      - develop  
      
 jobs: 
   setup:

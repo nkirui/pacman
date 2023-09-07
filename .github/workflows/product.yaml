@@ -65,7 +65,7 @@ jobs:
         with:
           push: true
           file: docker/Dockerfile      
-          tags: ${{ github.repository }}:${{ github.event.release.tag_name }}
+          tags: "nkirui2030/pacman:${{ github.event.release.tag_name }}"
           build-args: VER=${{ github.event.release.tag_name }}
  
   config:
