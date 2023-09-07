@@ -66,8 +66,8 @@ jobs:
           push: true
           file: docker/Dockerfile      
           tags: "nkirui2030/pacman:${{ github.event.release.tag_name }}"
-          build-args: VER=${{ github.event.release.tag_name }}
- 
+          build-args: VER=${{ github.event.release.tag_name }}       
+          
   config:
     needs: [setup, docker]
     runs-on: ubuntu-latest
@@ -80,8 +80,8 @@ jobs:
           token: ${{ secrets.ACTIONS_GOLANG }}
       - name: Push release tag to config repository
         run: |
-          echo ${{ github.event.release.tag_name }} > infra/helm/pacman/crds/vcs/tag
+          sed -i 's/^  tag: .*/  tag: ${{ github.event.release.tag_name }}/' $(pwd)/infra/helm/pacman/prod.yaml
           git config user.name $(git log -n 1 --pretty=format:%an)
           git config user.email $(git log -n 1 --pretty=format:%ae)
-          git commit infra/helm/pacman/crds/vcs/tag -m "pacman ${{ github.event.release.tag_name }}"
+          git commit infra/helm/pacman/prod.yaml -m "pacman ${{ github.event.release.tag_name }}"
           git push
