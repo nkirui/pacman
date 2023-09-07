@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - develop
+      - main
     tags-ignore:
       # Ignore all tags as we do not want
       # to trigger this workflow by a release.
@@ -79,7 +80,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
-          ref: develop
+          ref: main
           token: ${{ secrets.ACTIONS_GOLANG }}
       - name: Push commit hash to config repository
         run: |
