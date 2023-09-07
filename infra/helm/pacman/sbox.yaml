@@ -4,8 +4,13 @@ env:
  
 image:
   name: nkirui2030/pacman
+<<<<<<< Updated upstream
   tag: v1.1.0-beta
   pull: Never
+=======
+  tag: ""
+  pull: IfNotPresent
+>>>>>>> Stashed changes
  
 deployment:
   force: false
