@@ -1,5 +1,6 @@
 env:
   HTTP_ADDR: :8080
+  NAMESPACE: dev
  
 image:
   name: nkirui2030/pacman
