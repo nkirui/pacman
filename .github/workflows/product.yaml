@@ -1,0 +1,83 @@
+
+name:  Production Build/Deploy
+ 
+on:
+  release:
+    types:
+      - released 
+jobs: 
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      ver: ${{ steps.vars.outputs.ver }}
+    steps:
+      - name: Use repository
+        uses: actions/checkout@v3
+      - name: Build variables
+        id: vars
+        run: |
+          echo "::set-output name=ver::$(git rev-parse --short "$GITHUB_SHA")"
+      - name: Upload repository
+        uses: actions/upload-artifact@v3
+        with:
+          name: repository
+          path: |
+            ${{ github.workspace }}/docker
+            ${{ github.workspace }}/.dockerignore
+            ${{ github.workspace }}/main.go
+            ${{ github.workspace }}/main_test.go
+            ${{ github.workspace }}/go.mod
+            ${{ github.workspace }}/go.sum
+ 
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Golang 1.21.0
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21.0
+      - name: Download repository
+        uses: actions/download-artifact@v3
+        with:
+          name: repository
+      - name: Run tests
+        run: go test -v -race -timeout=180s -count=1 -cover ./...
+ 
+  docker:
+    needs: [setup, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download repository
+        uses: actions/download-artifact@v3
+        with:
+          name: repository
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push image
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          file: docker/Dockerfile
+          tags: "nkirui2030/pacman:latest"
+          build-args: VER=${{ needs.setup.outputs.ver }}
+ 
+  config:
+    needs: [setup, docker]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use config repository
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+          ref: main
+          token: ${{ secrets.ACTIONS_GOLANG }}
+      - name: Push release tag to config repository
+        run: |
+          echo ${{ github.event.release.tag_name }} > infra/helm/pacman/crds/vcs/tag
+          git config user.name $(git log -n 1 --pretty=format:%an)
+          git config user.email $(git log -n 1 --pretty=format:%ae)
+          git commit infra/helm/pacman/crds/vcs/tag -m "pacman ${{ github.event.release.tag_name }}"

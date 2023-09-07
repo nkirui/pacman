@@ -1,30 +1,25 @@
-# Trigger the workflow only when:
-# - an existing pull request with any name/type is merged to the master or develop branch
-# - a commit is directly pushed to the master or develop branch
- 
-name: Merge
+
+name:  Sandbox Build/Deploy
  
 on:
-  push:
-    branches:
-      - main
-      - develop
+  release:
+    types:
+      - prereleased
  
-jobs:
- 
+jobs: 
   setup:
     runs-on: ubuntu-latest
     outputs:
       ver: ${{ steps.vars.outputs.ver }}
     steps:
       - name: Use repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Build variables
         id: vars
         run: |
           echo "::set-output name=ver::$(git rev-parse --short "$GITHUB_SHA")"
       - name: Upload repository
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: repository
           path: |
@@ -40,11 +35,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Use Golang 1.21.0
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
           go-version: 1.21.0
       - name: Download repository
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: repository
       - name: Run tests
@@ -55,16 +50,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download repository
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: repository
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           push: true
           file: docker/Dockerfile
@@ -76,15 +71,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Use config repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
-          ref: main
+          ref: sandbox
           token: ${{ secrets.ACTIONS_GOLANG }}
-      - name: Push commit hash to config repository
+      - name: Push release tag to config repository
         run: |
-          echo ${{ needs.setup.outputs.ver }} > infra/helm/pacman/crds/vcs/hash
+          echo ${{ github.event.release.tag_name }} > infra/helm/pacman/crds/vcs/tag
           git config user.name $(git log -n 1 --pretty=format:%an)
           git config user.email $(git log -n 1 --pretty=format:%ae)
-          git commit infra/helm/pacman/crds/vcs/hash -m "pacman ${{ needs.setup.outputs.ver }}"
-          git push origin HEAD
+          git commit infra/helm/pacman/crds/vcs/tag -m "pacman ${{ github.event.release.tag_name }}"
