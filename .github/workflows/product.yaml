@@ -81,4 +81,4 @@ jobs:
           git config user.name $(git log -n 1 --pretty=format:%an)
           git config user.email $(git log -n 1 --pretty=format:%ae)
           git commit infra/helm/pacman/crds/vcs/tag -m "pacman ${{ github.event.release.tag_name }}"
-          git push
+          git push origin HEAD
