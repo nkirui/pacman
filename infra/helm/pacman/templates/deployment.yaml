@@ -17,12 +17,12 @@ spec:
         app: {{ .Chart.Name }}
       {{- if .Values.deployment.force }}
       annotations:
-        roller: {{ .Files.Get "crds/vcs/hash" | trim }}
+        roller: {{ .Values.image.tag }}
       {{- end }}
     spec:
       containers:
         - name: {{ .Values.deployment.container.name }}
-          image: "{{ .Values.image.name }}:{{ .Values.image.tag | default (.Files.Get "crds/vcs/tag" | trim) }}"
+          image: "{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pull }}
           ports:
             - containerPort: {{ .Values.deployment.container.port }}
