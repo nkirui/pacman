@@ -4,8 +4,7 @@ name:  Production Build/Deploy
 on:
   release:
     types:
-      - released
- 
+      - released 
 jobs: 
   setup:
     runs-on: ubuntu-latest
