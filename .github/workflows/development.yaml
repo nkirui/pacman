@@ -1,6 +1,6 @@
 
 name:  Development Build/Deploy
- 
+
 on:
   push:
     branches:
@@ -9,7 +9,8 @@ on:
       # Ignore all tags as we do not want
       # to trigger this workflow by a release.
       - "**"
- 
+
+     
 jobs: 
   setup:
     runs-on: ubuntu-latest
@@ -86,4 +87,3 @@ jobs:
           git config user.name $(git log -n 1 --pretty=format:%an)
           git config user.email $(git log -n 1 --pretty=format:%ae)
           git commit infra/helm/pacman/crds/vcs/hash -m "pacman ${{ needs.setup.outputs.ver }}"
-          git push origin HEAD
