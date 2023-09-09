@@ -4,7 +4,7 @@ env:
  
 image:
   name: nkirui2030/pacman
-  tag: ""
+  tag: v1.1.8
   pull: IfNotPresent
  
 deployment:
