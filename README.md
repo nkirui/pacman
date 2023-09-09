@@ -2,9 +2,9 @@
 
 ## DESCRIPTION
 
-- This project is a demo for CI/CD workflow
+- Desirable GITOPS CI/CD flow
 
-## STACK REQUIREMENTS
+## STACK REQUIREMENTS FOR TEST
 
 - Golang
 - K8s
@@ -30,4 +30,8 @@ argocd repo add https://github.com/nkirui/pacman \
 
 ### 2
 
+Promoting project into environments
 
+- DEVEVLOPMENT e.q to  latest  developement version by developers
+- SANDBOX -  e.q to demo or beta version, in github it is pre-releas- client/customer demo
+- PRODUCTION - e.q to very critical live version, in github it is release ,
