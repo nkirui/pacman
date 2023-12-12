@@ -14,11 +14,15 @@
 
 ## STEPS
 
+## Login
+
+- argocd login "<ipaddress|domain name>"
+
 ### 1
 
 - Add github repo to argo to create a  project level
 
-```
+```text
 argocd repo add https://github.com/nkirui/pacman \
     --type git \
     --name pacman \

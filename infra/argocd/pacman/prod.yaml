@@ -16,6 +16,9 @@ spec:
     name: in-cluster
     namespace: prod
   syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
     syncOptions:
       - ApplyOutOfSyncOnly=true
       - CreateNamespace=true
